@@ -41,12 +41,14 @@ router.post("/edit-nft/:id", async (req, res) => {
   try {
     let nftId = req.params.id;
     let previousnftData = await revise.fetchNFT(nftId);
-
+    let saveData;
     for (let key in props) {
-      await (await revise.updateNFT(nftId))
-        .setProperty(key.toString(), props[key].toString())
-        .save();
+      saveData = await (
+        await revise.updateNFT(nftId)
+      ).setProperty(key.toString(), props[key].toString());
     }
+
+    saveData.save();
 
     let updatenftData = await revise.fetchNFT(nftId);
     return res.json({
@@ -123,7 +125,6 @@ router.post("/edit-nft-image/:id", async (req, res) => {
     console.log(error);
   }
 });
-
 
 router.get("nft-ipfs-link/:nftId", async (req, res) => {
   try {
